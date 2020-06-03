@@ -9,7 +9,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.com.hourjob.controller.form.VagaForm;
 import br.com.hourjob.dto.VagaDto;
@@ -54,12 +56,19 @@ public class VagaService {
 			
 			for (Qualificacao qualificacao : candidato.get().getQualificacao()) {
 				
-				vagas.addAll(vagaRepository.findByRequisito(qualificacao.getHabilidades()));
+				vagas.addAll(vagaRepository.findByRequisitoAndCandidatoId(qualificacao.getHabilidades(), null));
 				
 			}
 		}
 		
-		return vagas;
+		if (vagas.size() != 0) {
+			
+			return vagas;
+		}
+		else {
+			 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
+		}
+		
 		
 	}
 

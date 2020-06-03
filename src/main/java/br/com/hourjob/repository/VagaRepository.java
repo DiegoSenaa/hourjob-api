@@ -13,5 +13,5 @@ public interface VagaRepository  extends JpaRepository<Vaga, Long> {
 	
 	Page<Vaga> findById(Long id, Pageable paginacao);
 	
-	List<Vaga> findByRequisito(String requisito);
+	List<Vaga> findByRequisitoAndCandidatoId(String requisito, String candidatoId);
 }
